@@ -1,6 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
 const db = require("./dbController");
+require("./keep_alive.js"); // Для UpTimeRobot
 
 const checkApi = async () => {
     let allData = await db.getAll();
@@ -19,7 +20,7 @@ const checkApi = async () => {
                     objData.pair,
                     valueOld,
                     valueNew,
-                    openInterest
+                    openInterest.toFixed(2)
                 );
             }
         } catch (error) {
