@@ -14,7 +14,7 @@ const checkApi = async () => {
                 valueNew = newData.data.openInterest;
                 valueOld = objData["value-new"] || 1;
                 openInterest = (valueNew * 100) / valueOld - 100;
-                console.log(`${objData.pair} - ${openInterest}%`);
+                console.log(`${objData.pair} - ${openInterest.toFixed(2)}%`);
                 db.updateElement(
                     objData._id,
                     objData.pair,
