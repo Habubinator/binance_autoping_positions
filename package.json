@@ -1,0 +1,26 @@
+{
+    "dependencies": {
+        "async": "^3.2.5",
+        "axios": "^1.6.7",
+        "dotenv": "^16.4.5"
+    },
+    "name": "binance_autoping_positions",
+    "description": "",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "node ./src/index.js"
+    },
+    "keywords": [
+        "binance",
+        "positions",
+        "autoping",
+        "db",
+        "crud",
+        "bubble.io",
+        "bubble",
+        "dataapi"
+    ],
+    "author": "Hudymenko Yevhenii",
+    "license": "MIT"
+}
