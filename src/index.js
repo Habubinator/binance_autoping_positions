@@ -27,7 +27,7 @@ const checkApi = async () => {
                 }
                 if (error.response && error.response.status === 400) {
                     console.log(
-                        `https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]} Received status 400. \n`
+                        `https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]} Received status 400.`
                     );
                     continue;
                 } else {
