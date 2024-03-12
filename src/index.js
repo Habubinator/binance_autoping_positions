@@ -7,9 +7,28 @@ const checkApi = async () => {
     let allData = await db.getAll();
     for (const objData of allData) {
         try {
-            const newData = await axios.get(
-                `https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]}`
-            );
+            let newData;
+            try {
+                newData = await axios.get(
+                    `https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]}`
+                );
+            } catch (error) {
+                if (error.response && error.response.status === 418) {
+                    const retryAfter = error.response.headers["retry-after"];
+                    await new Promise((resolve) =>
+                        setTimeout(resolve, retryAfter * 1000)
+                    );
+                    newData = await axios.get(
+                        `https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]}`
+                    );
+                } else {
+                    console.log(
+                        `For https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]} ` +
+                            error.message
+                    );
+                }
+            }
+
             if (newData.data) {
                 let valueNew = newData.data.openInterest;
                 let valueOld = objData["value-new"] || 1;
