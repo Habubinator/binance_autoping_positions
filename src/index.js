@@ -24,6 +24,12 @@ const checkApi = async () => {
                     newData = await axios.get(
                         `https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]}`
                     );
+                }
+                if (error.response && error.response.status === 400) {
+                    console.log(
+                        `https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]} Received status 400. \n`
+                    );
+                    continue;
                 } else {
                     console.log(
                         `For https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]} ` +
@@ -32,7 +38,7 @@ const checkApi = async () => {
                 }
             }
 
-            if (newData.data) {
+            if (newData && newData.data) {
                 let valueNew = newData.data.openInterest;
                 let valueOld = objData["value-new"] || 1;
                 let openInterest = ((valueNew * 100) / valueOld - 100).toFixed(
