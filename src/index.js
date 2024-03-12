@@ -27,7 +27,7 @@ const checkApi = async () => {
             }
         } catch (error) {
             console.log(
-                `For https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]}` +
+                `For https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]} ` +
                     error.message
             );
             continue;
