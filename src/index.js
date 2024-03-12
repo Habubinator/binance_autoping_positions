@@ -15,6 +15,9 @@ const checkApi = async () => {
             } catch (error) {
                 if (error.response && error.response.status === 418) {
                     const retryAfter = error.response.headers["retry-after"];
+                    console.log(
+                        `https://fapi.binance.com/fapi/v1/openInterest?symbol=${objData["pair"]} Received status 418. \nWaiting ${retryAfter} seconds before retrying.`
+                    );
                     await new Promise((resolve) =>
                         setTimeout(resolve, retryAfter * 1000)
                     );
