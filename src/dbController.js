@@ -3,10 +3,9 @@ const { doWhilst } = require("async");
 const config = {
     headers: { Authorization: `Bearer ${process.env.TOKEN}` },
 };
-const link = process.env.BASE_LINK;
 
 class DB {
-    async getAll() {
+    async getAll(link) {
         const pageCount = 100;
         let allRecords = [],
             noOfPages = 0,
@@ -57,6 +56,27 @@ class DB {
             );
         } else {
             console.log("Some data is undefined");
+        }
+    }
+
+    async checkUNIX(unixStampLink) {
+        let obj = await this.getAll(unixStampLink);
+        if (unixStampLink) {
+            let dateNow = Date.now();
+            let timestamp = obj["data-time-unix"];
+            if (dateNow > timestamp) {
+                axios.put(
+                    `${link}/${obj["_id"]}`,
+                    {
+                        "data-time-unix": dateNow + TIMEOUT_IN_MINUTES * 60,
+                    },
+                    config
+                );
+                return 0;
+            }
+            return timestamp - dateNow;
+        } else {
+            console.log("Bubble io database is offline or data set is empty");
         }
     }
 }
