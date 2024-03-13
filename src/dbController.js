@@ -62,10 +62,10 @@ class DB {
     async checkUNIX(unixStampLink) {
         let obj = (await this.getAll(unixStampLink))[0];
         if (unixStampLink) {
-            let dateNow = Math.floor(Date.now() / 1000);
+            let dateNow = Math.ceil(Date.now() / 1000);
             let timestamp = obj["data-time-unix"];
             if (dateNow > timestamp) {
-                axios.put(
+                await axios.put(
                     `${unixStampLink}/${obj["_id"]}`,
                     {
                         "data-time-unix":
