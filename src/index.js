@@ -16,9 +16,7 @@ const checkApi = async () => {
     while (true) {
         let unixTime = await db.checkUNIX(unixStampLink);
         if (unixTime) {
-            console.log(
-                `Script worked less than 30m ago. Waiting ${unixTime} seconds`
-            );
+            console.log(`Waiting ${unixTime} seconds for next iteration`);
             await delay(unixTime * 1000);
         }
 
