@@ -45,7 +45,7 @@ class DB {
             openInterest != undefined
         ) {
             await axios.put(
-                `${link}/${id}`,
+                `${process.env.BASE_LINK}/${id}`,
                 {
                     pair: pair,
                     "value-old": valueOld,
