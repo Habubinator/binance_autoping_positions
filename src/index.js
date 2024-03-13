@@ -14,7 +14,7 @@ const checkApi = async () => {
         setInterval(checkApi, process.env.TIMEOUT_IN_MINUTES * 60 * 1000);
     }
     let allData = await db.getAll(cryptoLink);
-    if (allData) {
+    if (allData && allData.length) {
         for (const objData of allData) {
             try {
                 let newData;
@@ -73,6 +73,7 @@ const checkApi = async () => {
                 continue;
             }
         }
+        console.log("Script succefully ended");
     } else {
         console.log("Bubble io database is offline or data set is empty");
     }

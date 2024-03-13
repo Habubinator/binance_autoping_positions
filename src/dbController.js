@@ -62,13 +62,15 @@ class DB {
     async checkUNIX(unixStampLink) {
         let obj = (await this.getAll(unixStampLink))[0];
         if (unixStampLink) {
-            let dateNow = Date.now();
+            let dateNow = Math.floor(Date.now() / 1000);
             let timestamp = obj["data-time-unix"];
+            console.log(timestamp - dateNow);
             if (dateNow > timestamp) {
                 axios.put(
-                    `${link}/${obj["_id"]}`,
+                    `${unixStampLink}/${obj["_id"]}`,
                     {
-                        "data-time-unix": dateNow + TIMEOUT_IN_MINUTES * 60,
+                        "data-time-unix":
+                            dateNow + process.env.TIMEOUT_IN_MINUTES * 60,
                     },
                     config
                 );
