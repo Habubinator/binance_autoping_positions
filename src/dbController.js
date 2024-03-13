@@ -60,7 +60,7 @@ class DB {
     }
 
     async checkUNIX(unixStampLink) {
-        let obj = await this.getAll(unixStampLink);
+        let obj = (await this.getAll(unixStampLink))[0];
         if (unixStampLink) {
             let dateNow = Date.now();
             let timestamp = obj["data-time-unix"];
