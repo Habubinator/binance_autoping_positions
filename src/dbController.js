@@ -64,7 +64,6 @@ class DB {
         if (unixStampLink) {
             let dateNow = Math.floor(Date.now() / 1000);
             let timestamp = obj["data-time-unix"];
-            console.log(timestamp - dateNow);
             if (dateNow > timestamp) {
                 axios.put(
                     `${unixStampLink}/${obj["_id"]}`,
