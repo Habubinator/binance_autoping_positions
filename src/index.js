@@ -7,12 +7,20 @@ const cryptoLink = process.env.BASE_LINK;
 const unixStampLink = process.env.UNIX_LINK;
 let timeOut;
 
+async function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const checkApi = async () => {
-    console.log(`Starting script`);
-    if (timeOut) {
-        clearTimeout(timeOut);
-        setInterval(checkApi, process.env.TIMEOUT_IN_MINUTES * 60 * 1000);
+    let unixTime = await db.checkUNIX(unixStampLink);
+    if (unixTime) {
+        console.log(
+            `Script worked less than 30m ago. Waiting ${unixTime} seconds`
+        );
+        await delay(unixTime * 1000);
     }
+
+    console.log(`Starting script`);
     let allData = await db.getAll(cryptoLink);
     if (allData && allData.length) {
         for (const objData of allData) {
@@ -84,16 +92,8 @@ const start = async () => {
         if (timeOut) {
             clearTimeout(timeOut); // Очистити таймер, на випадок якщо все покращиться, щоб код не запускався двічі
         }
-        let unixTime = await db.checkUNIX(unixStampLink);
-        if (unixTime) {
-            console.log(
-                `Script worked less than 30m ago. Waiting ${unixTime} seconds`
-            );
-            timeOut = setTimeout(checkApi, unixTime * 1000);
-        } else {
-            await checkApi();
-            setInterval(checkApi, process.env.TIMEOUT_IN_MINUTES * 60 * 1000);
-        }
+        await checkApi();
+        setInterval(checkApi, process.env.TIMEOUT_IN_MINUTES * 60 * 1000);
     } catch (error) {
         console.log(error);
         timeOut = setTimeout(start, 5 * 60 * 1000); // Якщо бд лежить, наприклад, то повторити через 5 хвилин
