@@ -58,28 +58,6 @@ class DB {
             console.log("Some data is undefined");
         }
     }
-
-    async checkUNIX(unixStampLink) {
-        let obj = (await this.getAll(unixStampLink))[0];
-        if (unixStampLink) {
-            let dateNow = Math.ceil(Date.now() / 1000);
-            let timestamp = obj["data-time-unix"];
-            if (dateNow > timestamp) {
-                await axios.put(
-                    `${unixStampLink}/${obj["_id"]}`,
-                    {
-                        "data-time-unix":
-                            dateNow + process.env.TIMEOUT_IN_MINUTES * 60,
-                    },
-                    config
-                );
-                return 0;
-            }
-            return timestamp - dateNow;
-        } else {
-            console.log("Bubble io database is offline or data set is empty");
-        }
-    }
 }
 
 module.exports = new DB();

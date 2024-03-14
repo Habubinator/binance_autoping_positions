@@ -4,22 +4,9 @@ const db = require("./dbController");
 require("./keep_alive.js"); // Для UpTimeRobot
 
 const cryptoLink = process.env.BASE_LINK;
-const unixStampLink = process.env.UNIX_LINK;
-let timeOut;
 
-async function delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-const checkApi = async () => {
-    // Дуже костильний і дуже простий метод рішення проблеми з очікуванням інтервалу, працює, тому залишаю так.
-    while (true) {
-        let unixTime = await db.checkUNIX(unixStampLink);
-        if (unixTime) {
-            console.log(`Waiting ${unixTime} seconds for next iteration`);
-            await delay(unixTime * 1000);
-        }
-
+const start = async () => {
+    try {
         console.log(`Starting script`);
         let allData = await db.getAll(cryptoLink);
         if (allData && allData.length) {
@@ -85,18 +72,9 @@ const checkApi = async () => {
         } else {
             console.log("Bubble io database is offline or data set is empty");
         }
-    }
-};
-
-const start = async () => {
-    try {
-        if (timeOut) {
-            clearTimeout(timeOut); // Очистити таймер, на випадок якщо все покращиться, щоб код не запускався двічі
-        }
-        checkApi();
+        process.exit(0);
     } catch (error) {
         console.log(error);
-        timeOut = setTimeout(start, 5 * 60 * 1000); // Якщо бд лежить, наприклад, то повторити через 5 хвилин
     }
 };
 
