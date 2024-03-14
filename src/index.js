@@ -1,7 +1,6 @@
 require("dotenv").config();
 const axios = require("axios");
 const db = require("./dbController");
-require("./keep_alive.js"); // Для UpTimeRobot
 
 const cryptoLink = process.env.BASE_LINK;
 
